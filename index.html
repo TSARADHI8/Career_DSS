@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career DSS — B.Tech Career Guidance</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+
+  :root {
+    --bg: #f8f7f4;
+    --surface: #ffffff;
+    --border: #e5e3dc;
+    --text: #1a1a1a;
+    --muted: #6b6b6b;
+    --accent: #185FA5;
+    --accent-light: #e6f1fb;
+    --success: #0f6e56;
+    --success-light: #e1f5ee;
+    --warning: #ba7517;
+    --warning-light: #faeeda;
+    --danger: #a32d2d;
+    --danger-light: #fcebeb;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-brand {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .nav-brand span { color: var(--accent); font-style: italic; }
+
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+
+  .btn {
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-primary:hover { background: #0C447C; }
+
+  .btn-outline {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--muted);
+  }
+  .btn-outline:hover { background: var(--bg); color: var(--text); }
+
+  .btn-lg {
+    padding: 13px 28px;
+    font-size: 15px;
+    border-radius: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Pages */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* Hero */
+  .hero {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 3rem;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 em { font-style: italic; color: var(--accent); }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 480px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+  }
+
+  .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  .hero-actions .btn { min-width: 160px; }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 860px;
+    margin: 4rem auto 0;
+    padding: 0 1.5rem 5rem;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+
+  .feature-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--accent-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    font-size: 16px;
+  }
+
+  .feature-card h3 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .feature-card p  { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* Auth forms */
+  .auth-wrap {
+    max-width: 420px;
+    margin: 4rem auto;
+    padding: 0 1.5rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+  }
+
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+  }
+
+  .card-sub { color: var(--muted); font-size: 14px; margin-bottom: 1.5rem; }
+
+  .form-group { margin-bottom: 1rem; }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+
+  input[type=text], input[type=email], input[type=password],
+  input[type=number], select, textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(24,95,165,0.1);
+  }
+
+  .form-link {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .form-link a { color: var(--accent); cursor: pointer; text-decoration: none; }
+  .form-link a:hover { text-decoration: underline; }
+
+  /* Dashboard */
+  .dash-wrap {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 5rem;
+  }
+
+  .dash-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .dash-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+  }
+
+  .dash-header p { color: var(--muted); font-size: 14px; margin-top: 2px; }
+
+  /* Profile form card */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .form-grid .full { grid-column: 1 / -1; }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Checkbox */
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .checkbox-row input[type=checkbox] {
+    width: 16px; height: 16px;
+    accent-color: var(--accent);
+  }
+
+  .checkbox-row span { font-size: 14px; color: var(--text); }
+
+  /* Results */
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .top-recommendation {
+    background: var(--accent);
+    color: white;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .top-rec-label { font-size: 12px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }
+  .top-rec-value { font-family: 'DM Serif Display', serif; font-size: 1.6rem; margin-top: 4px; }
+  .confidence-badge {
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .options-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .option-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .option-rank {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    min-width: 18px;
+  }
+
+  .option-name { flex: 1; font-size: 14px; font-weight: 500; }
+
+  .option-bar-wrap {
+    width: 100px;
+    height: 5px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .option-bar {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.8s ease;
+  }
+
+  .option-score {
+    font-size: 13px;
+    color: var(--muted);
+    min-width: 20px;
+    text-align: right;
+  }
+
+  .features-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 1.25rem;
+  }
+
+  .feat-chip {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .feat-chip-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .feat-chip-value { font-size: 15px; font-weight: 500; margin-top: 2px; }
+
+  .badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .badge-high    { background: var(--success-light); color: var(--success); }
+  .badge-medium  { background: var(--warning-light); color: var(--warning); }
+  .badge-low     { background: var(--danger-light);  color: var(--danger); }
+
+  .history-list  { display: flex; flex-direction: column; gap: 10px; margin-top: 1rem; }
+
+  .history-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .history-rec {
+    font-weight: 500;
+    font-size: 15px;
+  }
+
+  .history-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .alert {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 1rem;
+  }
+
+  .alert-error   { background: var(--danger-light);  color: var(--danger); }
+  .alert-success { background: var(--success-light); color: var(--success); }
+
+  .spinner {
+    display: inline-block;
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-grid .full { grid-column: 1; }
+    .features { grid-template-columns: 1fr; }
+    .features-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" onclick="showPage('home')" style="cursor:pointer">
+    Career <span>DSS</span>
+  </a>
+  <div class="nav-right" id="nav-right">
+    <button class="btn btn-outline" onclick="showPage('login')">Login</button>
+    <button class="btn btn-primary" onclick="showPage('register')">Get Started</button>
+  </div>
+</nav>
+
+<!-- HOME PAGE -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-badge">AI-Powered · B.Tech Career Guidance</div>
+    <h1>What's your next move<br>after <em>graduation?</em></h1>
+    <p>Enter your academic profile and get a personalized, ML-powered career recommendation — backed by real placement data.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="showPage('register')">Analyse my profile →</button>
+      <button class="btn btn-outline" onclick="showPage('login')">I have an account</button>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3>ML Predictions</h3>
+      <p>RandomForest model trained on 1000+ real placement records gives you data-driven recommendations.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3>Secure & Private</h3>
+      <p>Your data is encrypted and stored securely in PostgreSQL. Only you can see your profile.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>4 Career Paths</h3>
+      <p>Ranked recommendations across Immediate Job, Higher Studies, Skill Improvement, and more.</p>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER PAGE -->
+<div id="page-register" class="page">
+  <div class="auth-wrap">
+    <div class="card">
+      <div class="card-title">Create your account</div>
+      <div class="card-sub">Join and get your career recommendation</div>
+      <div id="reg-alert"></div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="reg-name" placeholder="e.g. Saradhi T" />
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="reg-email" placeholder="you@college.edu" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="reg-password" placeholder="Min 6 characters" />
+      </div>
+      <button class="btn btn-primary btn-lg" onclick="register()" id="reg-btn">Create Account</button>
+      <div class="form-link">Already have an account? <a onclick="showPage('login')">Login here</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN PAGE -->
+<div id="page-login" class="page">
+  <div class="auth-wrap">
+    <div class="card">
+      <div class="card-title">Welcome back</div>
+      <div class="card-sub">Login to see your career recommendations</div>
+      <div id="login-alert"></div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="login-email" placeholder="you@college.edu" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="Your password" />
+      </div>
+      <button class="btn btn-primary btn-lg" onclick="login()" id="login-btn">Login</button>
+      <div class="form-link">No account yet? <a onclick="showPage('register')">Register here</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD PAGE -->
+<div id="page-dashboard" class="page">
+  <div class="dash-wrap">
+    <div class="dash-header">
+      <div>
+        <h2 id="dash-greeting">Hello!</h2>
+        <p>Submit your profile below to get your personalised career recommendation.</p>
+      </div>
+      <button class="btn btn-outline" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Profile form -->
+    <div class="card" id="profile-form-card">
+      <div class="section-title">Your Academic Profile</div>
+      <div id="form-alert"></div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Skills (comma separated)</label>
+          <input type="text" id="f-skills" placeholder="Python, ML/AI, Web Dev, SQL" />
+        </div>
+        <div class="form-group">
+          <label>Active Backlogs</label>
+          <select id="f-backlogs">
+            <option value="0">0 — No backlogs</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="5">4+</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Projects Completed</label>
+          <input type="number" id="f-projects" min="0" max="50" value="3" />
+        </div>
+        <div class="form-group">
+          <label>Internships Done</label>
+          <input type="number" id="f-internships" min="0" max="20" value="1" />
+        </div>
+        <div class="form-group full">
+          <label class="checkbox-row">
+            <input type="checkbox" id="f-higher" />
+            <span>I am interested in Higher Studies (M.Tech / MS / MBA)</span>
+          </label>
+        </div>
+      </div>
+      <br>
+      <button class="btn btn-primary btn-lg" onclick="submitProfile()" id="predict-btn">
+        Get My Career Recommendation →
+      </button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-section" style="display:none">
+      <div class="result-card">
+        <div class="section-title">ML Recommendation</div>
+        <div class="top-recommendation">
+          <div>
+            <div class="top-rec-label">Top Career Path</div>
+            <div class="top-rec-value" id="r-top">—</div>
+          </div>
+          <div class="confidence-badge" id="r-conf">—</div>
+        </div>
+
+        <div class="section-title">All Options Ranked</div>
+        <div class="options-list" id="r-options"></div>
+
+        <div class="section-title" style="margin-top:1.25rem">Your Computed Profile</div>
+        <div class="features-row" id="r-features"></div>
+      </div>
+
+      <div style="margin-top:1rem;text-align:center">
+        <button class="btn btn-outline" onclick="resetForm()">← Submit another profile</button>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div style="margin-top:2.5rem">
+      <div class="section-title">Previous Submissions</div>
+      <div class="history-list" id="history-list">
+        <p style="color:var(--muted);font-size:14px">No submissions yet.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:8000';
+  let token = localStorage.getItem('dss_token');
+  let currentUser = null;
+
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function setNavLoggedIn(name) {
+    document.getElementById('nav-right').innerHTML = `
+      <span style="font-size:14px;color:var(--muted)">Hi, ${name}</span>
+      <button class="btn btn-primary" onclick="showPage('dashboard')">Dashboard</button>
+    `;
+  }
+
+  function setNavLoggedOut() {
+    document.getElementById('nav-right').innerHTML = `
+      <button class="btn btn-outline" onclick="showPage('login')">Login</button>
+      <button class="btn btn-primary" onclick="showPage('register')">Get Started</button>
+    `;
+  }
+
+  function showAlert(id, msg, type) {
+    document.getElementById(id).innerHTML =
+      `<div class="alert alert-${type}">${msg}</div>`;
+  }
+
+  async function register() {
+    const name = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+    if (!name || !email || !password) return showAlert('reg-alert', 'Please fill all fields.', 'error');
+
+    const btn = document.getElementById('reg-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Creating...';
+
+    try {
+      const res = await fetch(`${API}/auth/register`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name, email, password})
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Registration failed');
+      showAlert('reg-alert', 'Account created! Logging you in...', 'success');
+      document.getElementById('login-email').value = email;
+      document.getElementById('login-password').value = password;
+      await login(true);
+    } catch(e) {
+      showAlert('reg-alert', e.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Create Account';
+    }
+  }
+
+  async function login(silent = false) {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    if (!silent && (!email || !password)) return showAlert('login-alert', 'Please fill all fields.', 'error');
+
+    const btn = document.getElementById('login-btn');
+    if (!silent) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Logging in...'; }
+
+    try {
+      const res = await fetch(`${API}/auth/login`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({email, password})
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Login failed');
+
+      token = data.access_token;
+      localStorage.setItem('dss_token', token);
+      await loadDashboard();
+    } catch(e) {
+      if (!silent) showAlert('login-alert', e.message, 'error');
+    } finally {
+      if (!silent) { btn.disabled = false; btn.textContent = 'Login'; }
+    }
+  }
+
+  async function loadDashboard() {
+    const res = await fetch(`${API}/auth/me`, { headers: {'Authorization': `Bearer ${token}`} });
+    if (!res.ok) return logout();
+    currentUser = await res.json();
+    document.getElementById('dash-greeting').textContent = `Hello, ${currentUser.name.split(' ')[0]}!`;
+    setNavLoggedIn(currentUser.name.split(' ')[0]);
+    await loadHistory();
+    showPage('dashboard');
+  }
+
+  async function loadHistory() {
+    const res = await fetch(`${API}/predict/history`, { headers: {'Authorization': `Bearer ${token}`} });
+    if (!res.ok) return;
+    const preds = await res.json();
+    const list = document.getElementById('history-list');
+    if (!preds.length) {
+      list.innerHTML = '<p style="color:var(--muted);font-size:14px">No submissions yet.</p>';
+      return;
+    }
+    list.innerHTML = preds.map(p => `
+      <div class="history-item">
+        <div>
+          <div class="history-rec">${p.top_recommendation}</div>
+          <div class="history-meta">${new Date(p.created_at).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'})}</div>
+        </div>
+        <span class="badge badge-high">${Math.round(p.ml_confidence * 100)}% confidence</span>
+      </div>
+    `).join('');
+  }
+
+  async function submitProfile() {
+    const skills = document.getElementById('f-skills').value.trim();
+    if (!skills) return showAlert('form-alert', 'Please enter at least one skill.', 'error');
+
+    const payload = {
+      skills,
+      backlogs:    parseInt(document.getElementById('f-backlogs').value),
+      projects:    parseInt(document.getElementById('f-projects').value),
+      internships: parseInt(document.getElementById('f-internships').value),
+      higher_studies_interest: document.getElementById('f-higher').checked,
+    };
+
+    const btn = document.getElementById('predict-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Analysing...';
+    document.getElementById('form-alert').innerHTML = '';
+
+    try {
+      const res = await fetch(`${API}/predict/`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Prediction failed');
+      showResults(data);
+      loadHistory();
+    } catch(e) {
+      showAlert('form-alert', e.message, 'error');
+      btn.disabled = false;
+      btn.textContent = 'Get My Career Recommendation →';
+    }
+  }
+
+  function showResults(data) {
+    document.getElementById('profile-form-card').style.display = 'none';
+    document.getElementById('results-section').style.display = 'block';
+
+    document.getElementById('r-top').textContent = data.top_recommendation;
+    document.getElementById('r-conf').textContent = `${Math.round(data.ml_confidence * 100)}% confidence`;
+
+    const maxScore = Math.max(...data.rule_scores.map(r => r.score), 1);
+    document.getElementById('r-options').innerHTML = data.rule_scores.map((r, i) => `
+      <div class="option-row">
+        <span class="option-rank">${i === 0 ? '★' : i+1}</span>
+        <span class="option-name">${r.option}</span>
+        <div class="option-bar-wrap">
+          <div class="option-bar" style="width:${Math.round((r.score/maxScore)*100)}%"></div>
+        </div>
+        <span class="option-score">${r.score}</span>
+      </div>
+    `).join('');
+
+    const btn = document.getElementById('predict-btn');
+    btn.disabled = false;
+    btn.textContent = 'Get My Career Recommendation →';
+  }
+
+  function resetForm() {
+    document.getElementById('profile-form-card').style.display = 'block';
+    document.getElementById('results-section').style.display = 'none';
+  }
+
+  function logout() {
+    token = null;
+    localStorage.removeItem('dss_token');
+    currentUser = null;
+    setNavLoggedOut();
+    showPage('home');
+  }
+
+  // Auto-login if token exists
+  if (token) loadDashboard();
+</script>
+</body>
+</html>
